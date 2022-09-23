@@ -4,6 +4,7 @@
 #include "forward.hpp"
 #include "arg.hpp"
 #include "ope.hpp"
+#include "constraint.hpp"
 
 //+++++++++++++++++//
 //    Namespace    //
@@ -52,8 +53,10 @@ namespace comlar{
         template <typename... As> inline Command (const std::string&, const std::string&, Attribute, As&...) noexcept;
 
         //_ Variable Function
-        template <typename Func> inline auto  set_check   (Func*) noexcept -> void; 
-        template <typename Func> inline auto  set_operate (Func*) noexcept -> void; 
+        template <typename Func>                    inline auto  set_check   (Func*)                           noexcept -> void; 
+        template <typename A, class B>              inline auto  set_check   (const Constraint<A, B>&)         noexcept -> void; 
+        template <typename A, class B, class... As> inline auto  set_check   (const Constraints<A, B, As...>&) noexcept -> void; 
+        template <typename Func>                    inline auto  set_operate (Func*)                           noexcept -> void; 
         
         inline auto  set_value (size_t, const char*) noexcept -> int    override;
         inline auto _nof_args  (void)                noexcept -> size_t override;

@@ -16,8 +16,8 @@ namespace comlar{
     struct Arg{
         
         //+    Member Constant Expression Function    +//
-                            static constexpr inline auto  nof_args (void) noexcept -> int32_t;
-        template <size_t N> static constexpr        auto _type     (Num<N> =Num<N>{ }) noexcept -> void;
+        static constexpr inline auto nof_args (void) noexcept -> int32_t;
+     
 
         //+    Member Varialbe    +//
         void* check =nullptr;
@@ -40,14 +40,8 @@ namespace comlar{
     struct Arg<A, As...>{
         
         //+    Member Constant Expression Function    +//
-                            static constexpr inline auto  nof_args (void) noexcept -> int32_t;
-        template <size_t N> static constexpr        auto _type     (Num<N> =Num<N>{ }) noexcept -> decltype(Arg<As...>::template _type<N-1>());
-                            static constexpr        auto _type     (Num<0> =Num<0>{ }) noexcept -> A;
-
-
-        //+    Alias    +//
-        template <size_t N> using type = decltype(_type(std::declval<Num<N>>()));
-    
+        static constexpr inline auto nof_args (void) noexcept -> int32_t;
+        
 
         //+    Member Variable    +//
         A          arg_val;

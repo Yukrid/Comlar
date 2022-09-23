@@ -81,7 +81,7 @@ namespace comlar{
     inline auto Arg<As...>::_check1 (Com& com_, const Bs&... bs_) const noexcept
         -> int
     {
-        if(check) return reinterpret_cast<int(*)(const Bs&...)>(check)(bs_...);
+        if(check) return reinterpret_cast<int(*)(const Bs&..., void*)>(check)(bs_..., check);
         else      return 0;
     }
 

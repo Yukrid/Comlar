@@ -19,16 +19,6 @@ int main(int argc, char** argv){
     float float_val=2.9;
     {
         Command<Arg<int, float>, Ope<float>> com{"f", "flmodify", REQUIRED, float_val};
-        com.set_check(+[](const int& a_, const float& b_){
-            
-            std::cout<<"flmodify check called: "<<a_<<" "<<b_<<std::endl;
-        
-            if(a_<0){
-                std::cerr<<"[-f, --flmodify] The first value should be plus."<<std::endl;
-                return -1;
-            }
-            else     return 0;
-        });
         com.set_operate(+[](const int& a_, const float& b_, float& float_val_){
         
             std::cout<<"flmodify operate called: "<<a_<<" "<<b_<<" "<<float_val_<<std::endl;
@@ -39,7 +29,7 @@ int main(int argc, char** argv){
         com.set_info("float modification", "[First should be plus]");
         exec.add_command(com);
     }
-
+  
 
     // Add Command -if, --intflag  (in: [nothing] --> out: bool)
     bool int_flag=false;
@@ -56,8 +46,20 @@ int main(int argc, char** argv){
     int int_val=0;
     {
         Command<Arg<int>, Ope<int>> com{"iv", "intvalue", OPTIONAL, int_val};
+        com.set_check(default_cstr<int, comlar::Neq>(0));
         com.set_operate(default_assign<int>());
         com.set_info("user int value");
+        exec.add_command(com);
+    }
+
+
+    // Add Command -c, --constant_value  (in: float --> out: float)
+    float c_value=0;
+    {
+        Command<Arg<float>, Ope<float>> com{"c", "constant_value", OPTIONAL, c_value};
+        com.set_check(default_and_cstrs<float, comlar::Geq, comlar::Les>({2.1, 3.5}));
+        com.set_operate(default_assign<float>());
+        com.set_info("test float value");
         exec.add_command(com);
     }
 
@@ -81,5 +83,6 @@ int main(int argc, char** argv){
     std::cout<<"float value: "<<float_val<<std::endl;
     std::cout<<"int flag   : "<<int_flag<<std::endl;
     std::cout<<"int value  : "<<int_val<<std::endl;
+    std::cout<<"float constant : "<<c_value<<std::endl;
 }
 ;

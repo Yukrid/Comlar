@@ -6,5 +6,6 @@
 #include "comlar/ope.hpp"
 #include "comlar/command.hpp"
 #include "comlar/executor.hpp"
+#include "comlar/constraint.hpp"
 
 #endif
