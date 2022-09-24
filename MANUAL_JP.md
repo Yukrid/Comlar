@@ -345,7 +345,7 @@ int main(int argc, char** argv){
 
 #### デフォルトチェック関数
 
-数値が単純な比較条件を満たしているか確認するチェック関数を実装したい場合，default_cstr関数，default_and_cstrs関数，default_or_cstrs関数を利用できます．default_cstr関すは１つの式評価を，default_and_cstrs関数，dafault_or_cstrs関数は複数の式をそれぞれ`and`，`or`で連結して評価します．
+数値が単純な比較条件を満たしているか確認するチェック関数を実装したい場合，default_cstr関数，default_and_cstrs関数，default_or_cstrs関数を利用できます．default_cstr関数は１つの式評価を，default_and_cstrs関数，dafault_or_cstrs関数は複数の式をそれぞれ`and`，`or`で連結して評価します．
 
 デフォルトチェック関数には，評価の仕方を評価クラスを用いてテンプレートパラメータとして与え，数値を引数で与えます．テンプレートパラメータに与えられる評価クラスには以下のようなものがあります．
 
@@ -486,7 +486,7 @@ int main(int argc, char** argv){
         opt.set_check(default_and_cstrs<float, Geq, Les>({-1., 1.}));
         opt.set_operate(default_assign<float>());
         //*** Set information for help
-        opt.set_info("set scalar value", "<=-1 and <1");
+        opt.set_info("set scalar value", ">=-1 and <1");
         exec.add_option(opt);
     }
 
@@ -545,7 +545,7 @@ int main(int argc, char** argv){
   
   ```
   Header String
-   -s  --scalar  set scalar value          <f>  <=-1 and <1
+   -s  --scalar  set scalar value          <f>  >=-1 and <1
    -f  --flag    turn on flag      (Opt.)                  
    -h  --help    show help         (Opt.)                  
   

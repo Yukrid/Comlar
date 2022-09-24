@@ -26,7 +26,7 @@ int main(int argc, char** argv){
         opt.set_check(default_and_cstrs<float, Geq, Les>({-1., 1.}));
         opt.set_operate(default_assign<float>());
         //*** Set information for help
-        opt.set_info("set scalar value", "<=-1 and <1");
+        opt.set_info("set scalar value", ">=-1 and <1");
         exec.add_option(opt);
     }
   
