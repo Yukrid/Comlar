@@ -13,7 +13,7 @@
   4. [実行器クラスの実行関数を呼び出し](#anc1-4)
   - [コード例と出力結果](#anc1-5) ([example/basic.cpp](/example/basic.cpp))
 
-- [追加機能](#anc2)
+- [発展的な機能](#anc2)
   
   1. [チェック処理の定義](#anc2-1)
   
@@ -207,8 +207,6 @@ execute関数は，コマンドライン引数の処理中にエラーが発生�
 
 COMLAR内のシステムは，今後新たな値が追加される場合であっても，負の値を戻り値として使用します．そのため自身で作成したユーザー定義関数の戻り値には正の値を用いることを推奨しています．
 
-
-
  <a name="anc1-5"></a>
 
 ### コード例と出力結果
@@ -333,7 +331,7 @@ int main(int argc, char** argv){
 
 <a name="anc2"></a>
 
-# 追加機能
+# 発展的な機能
 
 <a name="anc2-1"></a>
 
@@ -404,10 +402,7 @@ int main(int argc, char** argv){
   
   ```cpp
   opt.set_check(default_and_cstrs<float, Geq, Les>({-1., 1.}))
-  
   ```
-
-
 
 <a name="anc2-2"></a>
 
@@ -450,8 +445,6 @@ opt.set_field(f1);
 各OptionクラスはField型の値を保持しており，デフォルトでは0です．
 
 ヘルプ表示時，フィールドはadd_field関数で追加した順に表示され，更にそのフィールドに属しているコマンドが，追加した順に表示されます．
-
-
 
 <a name="anc2-3"></a>
 
@@ -564,5 +557,7 @@ int main(int argc, char** argv){
   [comlar::Executor::execute] Error detected in checking -s --scalar (-6).
   result: -6
   ```
+
+
 
 
