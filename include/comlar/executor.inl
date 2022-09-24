@@ -38,20 +38,20 @@ namespace comlar{
 
 
     //_ Variable Function
-    template <class Com>
-    inline auto Executor::add_command (Com& com_) noexcept
+    template <class Opt>
+    inline auto Executor::add_option (Opt& com_) noexcept
         -> Core*
     {
         if(abrn_tb.find(com_.abr_name)!=abrn_tb.end()){
             
-            error_os<<"[comlar::Executor::add_command] -"<<com_.abr_name<<" already exists as another option."<<std::endl;
+            error_os<<"[comlar::Executor::add_option] -"<<com_.abr_name<<" already exists as another option."<<std::endl;
             return nullptr;
 
         }else{
     
             if(fomn_tb.find(com_.fom_name)!=fomn_tb.end()){
             
-                error_os<<"[comlar::Executor::add_command] --"<<com_.fom_name<<" already exists as another option."<<std::endl;
+                error_os<<"[comlar::Executor::add_option] --"<<com_.fom_name<<" already exists as another option."<<std::endl;
                 return nullptr;
 
             }else{
@@ -59,7 +59,7 @@ namespace comlar{
                 cores.push_back(nullptr);
                 cores[cores.size()-1]=(reinterpret_cast<Core*>(std::malloc(sizeof com_)));
                 Core& core=*cores[cores.size()-1]; 
-                new(reinterpret_cast<Com*>(&core)) Com(com_);
+                new(reinterpret_cast<Opt*>(&core)) Opt(com_);
     
                 abrn_tb[core.abr_name]=&core;
                 fomn_tb[core.fom_name]=&core;
@@ -85,12 +85,12 @@ namespace comlar{
     {
         help_head=head_;
 
-        Command<Arg<>, Ope<Executor, std::ostream>> com{"h", "help", OPTIONAL, *this, os_};
+        Option<Arg<>, Ope<Executor, std::ostream>> com{"h", "help", OPTIONAL, *this, os_};
         
         com.set_info("show help");
         com.set_operate(+[](Executor& exec_, std::ostream& os_){
            
-            os_<<std::endl<<exec_.help_head<<std::endl;
+            os_<<exec_.help_head<<std::endl;
 
             for(size_t a=0; a<exec_.fields.size(); ++a){
                 
@@ -144,7 +144,7 @@ namespace comlar{
             std::exit(EXIT_SUCCESS);
         });
         
-        return add_command(com);
+        return add_option(com);
     } 
 
 

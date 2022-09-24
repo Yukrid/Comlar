@@ -19,9 +19,9 @@ namespace comlar{
     template <typename... As>
     struct Ope;
 
-    //(    comlar::Command<Arg, Ope> Structure Template    )//
+    //(    comlar::Option<Arg, Ope> Structure Template    )//
     template <class Arg, class Ope>
-    struct Command;
+    struct Option;
 
     //(    comlar::Executor Structure Template    )//
     struct Executor;

@@ -1,5 +1,5 @@
-#ifndef COMLAR_COMMAND_HPP
-#define COMLAR_COMMAND_HPP
+#ifndef COMLAR_OPTION_HPP
+#define COMLAR_OPTION_HPP
 
 #include "forward.hpp"
 #include "arg.hpp"
@@ -44,13 +44,13 @@ namespace comlar{
 
 
 
-    //(    comlar::Command<Arg, Ope> Structure    )//
+    //(    comlar::Option<Arg, Ope> Structure    )//
     template <class Arg, class Ope>
-    struct Command : public Core, Arg, Ope{
+    struct Option : public Core, Arg, Ope{
         
         //+    Member Function    +//
         //_ Constructor
-        template <typename... As> inline Command (const std::string&, const std::string&, Attribute, As&...) noexcept;
+        template <typename... As> inline Option (const std::string&, const std::string&, Attribute, As&...) noexcept;
 
         //_ Variable Function
         template <typename Func>                    inline auto  set_check   (Func*)                           noexcept -> void; 
@@ -65,6 +65,6 @@ namespace comlar{
     };
 }
 
-#include "command.inl"
+#include "option.inl"
 
 #endif

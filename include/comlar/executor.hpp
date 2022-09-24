@@ -2,7 +2,7 @@
 #define COMLAR_EXECUTOR_HPP
 
 #include "forward.hpp"
-#include "command.hpp"
+#include "option.hpp"
 #include <vector>
 #include <unordered_map>
 
@@ -36,10 +36,10 @@ namespace comlar{
         inline ~Executor (void) noexcept;
 
         //_ Variable Function
-        template <class Com> inline auto add_command (Com& com_)                                        noexcept -> Core*;
-                             inline auto add_field   (const std::string&)                               noexcept -> Field;
-                             inline auto add_help    (const std::string& ="", std::ostream& =std::cout) noexcept -> Core*;
-                             inline auto execute     (void)                                             noexcept -> int;
+        template <class Opt> inline auto add_option (Opt& Opt_)                                        noexcept -> Core*;
+                             inline auto add_field  (const std::string&)                               noexcept -> Field;
+                             inline auto add_help   (const std::string& ="", std::ostream& =std::cout) noexcept -> Core*;
+                             inline auto execute    (void)                                             noexcept -> int;
     };
 }
 

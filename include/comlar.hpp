@@ -4,7 +4,7 @@
 #include "comlar/forward.hpp"
 #include "comlar/arg.hpp"
 #include "comlar/ope.hpp"
-#include "comlar/command.hpp"
+#include "comlar/option.hpp"
 #include "comlar/executor.hpp"
 #include "comlar/constraint.hpp"
 
