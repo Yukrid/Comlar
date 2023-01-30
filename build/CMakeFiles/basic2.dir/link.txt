@@ -1,1 +1,0 @@
-/usr/bin/c++     CMakeFiles/basic2.dir/example/basic2.cpp.o  -o basic2 
