@@ -7,8 +7,7 @@ int main(int argc, char** argv){
 
     //-> 1. Instantiation of Executor class
     Executor exec(argc, argv);
-    Field f1=exec.add_field("float value");
-    Field f2=exec.add_field("others");
+
 
 
     //-> 2. Prepare variables for use in option operation
@@ -21,11 +20,9 @@ int main(int argc, char** argv){
     //-> 3. Definition of options
     // Example1 (-f1 --float1)
     {
-        Option<float> opt{"f1", "float1", REQUIRED, f_val1};
+        Option<float> opt{"f1", "float1", OPTIONAL, f_val1};
         
         opt.set_operate(opt.default_assign());
-        opt.set_info("the first float value");
-        opt.set_field(f1);
         
         exec.add_option(opt);
     }
@@ -41,8 +38,6 @@ int main(int argc, char** argv){
         });
 
         opt.set_operate(opt.default_assign());
-        opt.set_info("the second float value", "-1< val <1");
-        opt.set_field(f1);
 
         exec.add_option(opt);
     }
@@ -52,15 +47,13 @@ int main(int argc, char** argv){
         Option<int, char> opt{"ic", "intchar", OPTIONAL, i_val, c_val};
 
         opt.set_operate(opt.default_assign());
-        opt.set_info("the int and char value");
-        opt.set_field(f2);
-
+        
         exec.add_option(opt);
     }
 
 
     //-> 4. Call the execute function of Exectutor class
-    exec.add_help("Comlar Sample Code \"addtional\"\r\n");
+    exec.add_help();
     int result=exec.execute();
     if(result){
         std::cout<<"result: "<<result<<std::endl;

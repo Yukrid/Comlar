@@ -1,4 +1,7 @@
-//#include "executor.hpp"
+#ifndef COMLAR_EXECUTOR_INL
+#define COMLAR_EXECUTOR_INL
+
+#include "executor.hpp"
 
 //+++++++++++++++++//
 //    Namespace    //
@@ -85,10 +88,10 @@ namespace comlar{
     {
         help_head=head_;
 
-        Option<Arg<>, Ope<Executor, std::ostream>> com{"h", "help", OPTIONAL, *this, os_};
+        Option<Arg<>, Executor, std::ostream> com{"h", "help", OPTIONAL, *this, os_};
         
         com.set_info("show help");
-        com.set_operate(+[](Executor& exec_, std::ostream& os_){
+        com.set_operate([](Executor& exec_, std::ostream& os_){
            
             os_<<exec_.help_head<<std::endl;
 
@@ -142,6 +145,8 @@ namespace comlar{
             }
 
             std::exit(EXIT_SUCCESS);
+
+            return 0;
         });
         
         return add_option(com);
@@ -158,13 +163,13 @@ namespace comlar{
         
 
         Core*  core;
-        size_t arg_num=0;
+        int32_t arg_num=0;
         size_t arg_cnt=0;
 
         for(uint32_t a=1; a<argc; ++a){
             
             std::string str(argv[a]);
-            
+
             switch(state){
 
                 case EXPECT_COM:
@@ -198,7 +203,7 @@ namespace comlar{
                                     error_os<<"[comlar::Executor::execute] -"<<core->abr_name<<" --"<<core->fom_name<<" has already been called."<<std::endl;
                                 }
                                 core->choiced=true;
-                                arg_num=core->_nof_args();
+                                arg_num=core->nof_args();
 
                             }
                         }
@@ -218,7 +223,7 @@ namespace comlar{
                                 error_os<<"[comlar::Executor::execute] "<<str<<" has already been called."<<std::endl;
                             }
                             core->choiced=true;
-                            arg_num=core->_nof_args();
+                            arg_num=core->nof_args();
                         }
                     }
                     
@@ -234,12 +239,12 @@ namespace comlar{
 
                     }else{
 
-                        if(int eval =core->_check()){
+                        if(int eval =core->function()){
                                 
-                            error_os<<"[comlar::Executor::execute] Error detected in checking -"<<core->abr_name<<" --"<<core->fom_name<<" ("<<eval<<")."<<std::endl;
+                            error_os<<"[comlar::Executor::execute] Error detected in functioning -"<<core->abr_name<<" --"<<core->fom_name<<" ("<<eval<<")."<<std::endl;
                             return eval;
                         }
-                        if(int eval =core->_operate()){
+                        if(int eval =core->operate()){
                                 
                             error_os<<"[comlar::Executor::execute] Error detected in operating -"<<core->abr_name<<" --"<<core->fom_name<<" ("<<eval<<")."<<std::endl;
                             return eval;
@@ -251,18 +256,24 @@ namespace comlar{
 
                 case EXPECT_ARG:
                 {
-                    core->set_value(arg_cnt++, str.c_str());
+
+                    if(arg_num<0){
+                        
+                        arg_num=std::stoull(str);
+                    }else{
+                        core->set_value(arg_cnt++, str.c_str());
+                    }
 
                     if(arg_cnt==arg_num){
                         
                         state=EXPECT_COM;
                         
-                        if(int eval =core->_check()){
+                        if(int eval =core->function()){
                                 
-                            error_os<<"[comlar::Executor::execute] Error detected in checking -"<<core->abr_name<<" --"<<core->fom_name<<" ("<<eval<<")."<<std::endl;
+                            error_os<<"[comlar::Executor::execute] Error detected in functioning -"<<core->abr_name<<" --"<<core->fom_name<<" ("<<eval<<")."<<std::endl;
                             return eval;
                         }
-                        if(int eval =core->_operate()){
+                        if(int eval =core->operate()){
                                 
                             error_os<<"[comlar::Executor::execute] Error detected in operating -"<<core->abr_name<<" --"<<core->fom_name<<" ("<<eval<<")."<<std::endl;
                             return eval;
@@ -293,3 +304,4 @@ namespace comlar{
         return 0;
     }
 }
+#endif

@@ -137,47 +137,9 @@ namespace comlar{
         return str_;
     }
     
-    template <typename A>
-    inline auto default_assign (void) noexcept -> int(*)(const A&, A&)
+    inline auto is_number (char c_) noexcept -> bool
     {
-        return +[](const A& i_, A& o_){
-            
-            o_=i_;
-
-            return 0;
-        };
-    }
-
-
-    template <bool B>
-    inline auto default_flag (void) noexcept -> int(*)(bool&)
-    {
-        return +[](bool& o_){
-            
-            o_=B;
-
-            return 0;
-        };
-    }
-
-
-    template <typename A, class B>
-    inline auto default_cstr (const A& a_) noexcept -> Constraint<A, B>
-    {
-        return Constraint<A, B>{a_};
-    }
-
-
-    template <typename A, class... As>
-    inline auto default_and_cstrs (std::initializer_list<A> lst_) noexcept -> AndConstraints<A, As...>
-    {
-        return AndConstraints<A, As...>{lst_};
-    }
-
-
-    template <typename A, class... As>
-    inline auto default_or_cstrs (std::initializer_list<A> lst_) noexcept -> OrConstraints<A, As...>
-    {
-        return OrConstraints<A, As...>{lst_};
+        if(47<c_ and c_<58) return true;
+        else                return false;
     }
 }

@@ -19,35 +19,19 @@ namespace comlar{
     template <typename... As>
     struct Ope;
 
-    //(    comlar::Option<Arg, Ope> Structure Template    )//
-    template <class Arg, class Ope>
+    //(    comlar::Option<As...> Structure Template    )//
+    template <typename... As>
     struct Option;
 
     //(    comlar::Executor Structure Template    )//
     struct Executor;
 
-    //(    comlar::Constraint<A, B> Structure Template    )//
-    template <typename A, class B>
-    struct Constraint;
-
-    //(    comlar::Constraint<A, B, As...> Structure Template    )//
-    template <typename A, class B, class... As>
-    struct Constraints;
 
 
     //-------------//
     //    Alias    //
     //-------------//
     using Field  =size_t;
-    using Les =std::less<>;
-    using Leq =std::less_equal<>;
-    using Grt =std::greater<>;
-    using Geq =std::greater_equal<>;
-    using Eq  =std::equal_to<>;
-    using Neq =std::not_equal_to<>;
-
-    template <typename A, class... As> using AndConstraints =Constraints<A, std::logical_and<>, As...>;
-    template <typename A, class... As> using OrConstraints  =Constraints<A, std::logical_or<>, As...>;
 
 
     //-----------------------//
@@ -58,21 +42,7 @@ namespace comlar{
         REQUIRED, OPTIONAL
     };
 
-
-    //(    comlar::Num Structure    )//
-    template <size_t N>
-    struct Num{
-
-    };
-
-
-    //(    comlar::VirtualType Structure    )//
-    template <typename T>
-    struct VirtualType{
     
-    };
-
-
     //----------------------------//
     //    Function Declaration    //
     //----------------------------//
@@ -94,12 +64,6 @@ namespace comlar{
     template <>                        inline auto str_conv<char>               (const char*) noexcept -> char;
     template <>                        inline auto str_conv<std::string>        (const char*) noexcept -> std::string;
     template <>                        inline auto str_conv<const char*>        (const char*) noexcept -> const char*;
-    
-    template <typename A>           inline auto default_assign    (void)                     noexcept -> int(*)(const A&, A&);
-    template <bool B>               inline auto default_bool      (void)                     noexcept -> int(*)(bool&);
-    template <typename A, class B>  inline auto default_cstr      (const A&)                 noexcept -> Constraint<A, B>;
-    template <class A, class... As> inline auto default_and_cstrs (std::initializer_list<A>) noexcept -> AndConstraints<A, As...>;
-    template <class A, class... As> inline auto default_or_cstrs  (std::initializer_list<A>) noexcept -> OrConstraints<A, As...>;
 }
 
 #include "forward.inl"

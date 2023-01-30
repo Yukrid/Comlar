@@ -1,3 +1,0 @@
-Other MarkText instance detected: exiting...
-strict mode: missing type "string" for keyword "pattern" at "#/properties/spellcheckerLanguage" (strictTypes)
-[20393:0925/014547.604040:ERROR:sandbox_linux.cc(374)] InitializeSandbox() called with multiple threads in process gpu-process.

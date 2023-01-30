@@ -1,4 +1,7 @@
-//#include "option.hpp"
+#ifndef COMLAR_OPTION_INL
+#define COMLAR_OPTION_INL
+
+#include "option.hpp"
 
 //+++++++++++++++++//
 //    Namespace    //
@@ -48,145 +51,328 @@ namespace comlar{
 
 
 
-    //(    comlar::Option<Arg, Ope> Structure    )//
+    //(    comlar::Option<As...> Structure    )//
+    //+    Member Constant Expression Function    +//
+    template <typename... As>
+    inline constexpr auto Option<As...>::default_assign (void) noexcept
+        -> std::function<int(const std::tuple<As...>&, std::tuple<As&...>&)>
+    {
+        return [](const std::tuple<As...>& arg_, std::tuple<As&...>& ope_){
+            
+            ope_=arg_;
+
+            return 0;
+        };
+    }
+
+
+    //+    Member Function    +//
     //_ Constructor
-    template <class Arg, class Ope> template <typename... As>
-    inline Option<Arg, Ope>::Option (const std::string& abrn_, const std::string& fomn_, Attribute atr_, As&... as_) noexcept
+    template <typename... As>
+    inline Option<As...>::Option (const std::string& abrn_, const std::string& fomn_, Attribute atr_, As&... as_) noexcept
         : Core {abrn_, fomn_, atr_}
-        , Arg  { }
-        , Ope  {as_...}
+        , args { }
+        , ope  {as_...}
     {
-        Arg::stream_type_str(Core::typestr);
-
-        return;
-    }
-    
-
-
-    //_ Varialbe Function
-    template <class Arg, class Ope> template <typename Func>
-    inline auto Option<Arg, Ope>::set_check (Func* f_) noexcept
-        -> void
-    {
-        Arg::set_check(reinterpret_cast<void*>(f_));
-
-        return;
-    }
-
-
-    template <class Arg, class Ope>  template <typename A, class B>
-    inline auto Option<Arg, Ope>::set_check (const Constraint<A, B>& cstr_) noexcept
-        -> void
-    {
-        using Itype=typename Arg::type<0>;
-
-        void* fp=reinterpret_cast<void*>(+[](const Itype& i_, void* ptr_){
-
-            const A& value=*reinterpret_cast<const A*>(_capture.at(ptr_));
-            int      ret;
-
-            if(Constraint<A, B>::get_result_func(VirtualType<Itype>{ })(i_, value)){
-                
-                ret=0;
-                
-            }else{
-
-                error_os<<"[comlar::(default_cstr::func)] Input value does not satisfy the constraint."<<std::endl;    
-                ret=-6;
-            }
-
-            delete reinterpret_cast<const A*>(_capture.at(ptr_));
-            _capture.erase(ptr_);
-
-            return ret;
-        });
-
-        _capture[fp]=reinterpret_cast<void*>(new A{cstr_.value});
-
-        Arg::set_check(fp);
+        args.stream_type_str(Core::typestr);
 
         return;
     }
  
 
-    template <class Arg, class Ope>  template <typename A, class B, class... As>
-    inline auto Option<Arg, Ope>::set_check (const Constraints<A, B, As...>& cstrs_) noexcept
+    template <typename... As>
+    inline Option<As...>::Option (const std::string& abrn_, const std::string& fomn_, Attribute atr_, std::tuple<As...>& tp_) noexcept
+        : Core {abrn_, fomn_, atr_}
+        , args { }
+        , ope  (tp_)
+    {
+        args.stream_type_str(Core::typestr);
+
+        return;
+    }
+   
+
+
+    //_ Varialbe Function
+    template <typename... As>
+    inline auto Option<As...>::set_value (size_t num_, const char* str_) noexcept
+        -> int
+    {
+        return args.set_value(num_, str_);
+    }
+
+
+    template <typename... As>
+    inline auto Option<As...>::nof_args (void) noexcept
+        -> size_t
+    {
+        return Arg<As...>::nof_args();
+    }
+    
+    
+
+    template <typename... As>
+    inline auto Option<As...>::operate (void) noexcept
+        -> int
+    {
+        return ope.operate(args);
+    }
+
+
+    template <typename... As>
+    inline auto Option<As...>::function (void) noexcept
+        -> int
+    {
+        return args.function();
+    }
+
+
+    template <typename... As>
+    inline auto Option<As...>::set_function (const typename Arg<As...>::FuncType1& f_) noexcept
         -> void
     {
-        using Itype=typename Arg::type<0>;
-        using Array=std::array<A, sizeof...(As)>;
+        args.set_function(f_);
 
-        void* fp=reinterpret_cast<void*>(+[](const Itype& i_, void* ptr_){
+        return;
+    }
 
-            const Array& values=*reinterpret_cast<Array*>(_capture.at(ptr_));
-            int          ret;
 
-            if(Constraints<A, B, As...>::get_result_func(VirtualType<Itype>{ }, Num<sizeof...(As)>{ })(i_, values, 0)){
-                
-                ret=0;
-                
-            }else{
-
-                error_os<<"[comlar::(default_cstr::func)] Input value does not satisfy the constraint."<<std::endl;    
-                ret=-6;
-            }
-
-            delete reinterpret_cast<Array*>(_capture.at(ptr_));
-            _capture.erase(ptr_);
-
-            return ret;
-        });
-
-        Array* ar_p =new Array;
-        for(size_t a=0; a<sizeof...(As); ++a){
-            ar_p->at(a)=cstrs_.get_value(a);
-        }
-        _capture[fp]=reinterpret_cast<void*>(ar_p);
-
-        Arg::set_check(fp);
+    template <typename... As>
+    inline auto Option<As...>::set_function (const typename Arg<As...>::FuncType2& f_) noexcept
+        -> void
+    {
+        args.set_function(f_);
 
         return;
     }
            
     
-    template <class Arg, class Ope> template <typename Func>
-    inline auto Option<Arg, Ope>::set_operate (Func* f_) noexcept
+    template <typename... As>
+    inline auto Option<As...>::set_operate (const typename Ope<Arg<As...>, As...>::FuncType1& f_) noexcept
         -> void
     {
-        Ope::set_operate(reinterpret_cast<void*>(f_));
+        ope.set_operate(f_);
 
         return;
     }
-    
+ 
 
-    template <class Arg, class Ope>
-    inline auto Option<Arg, Ope>::_nof_args (void) noexcept
+    template <typename... As>
+    inline auto Option<As...>::set_operate (const typename Ope<Arg<As...>, As...>::FuncType2& f_) noexcept
+        -> void
+    {
+        ope.set_operate(f_);
+
+        return;
+    }
+
+
+
+    //(    comlar::Option<Arg<>, bool> Structure    )//
+    //+    Member Constant Expression Function    +//
+    template <bool B> inline auto Option<Arg<>, bool>::default_flag (void) noexcept
+        -> std::function<int(bool&)>
+    {
+        return [](bool& b_){
+            b_=B;
+            return 0;
+        };
+    }
+
+
+
+    //+    Member Function    +//
+    //_ Constructor
+    inline Option<Arg<>, bool>::Option (const std::string& abrn_, const std::string& fomn_, Attribute atr_, bool& bs_) noexcept
+        : Core {abrn_, fomn_, atr_}
+        , args { }
+        , ope  {bs_}
+    {
+        args.stream_type_str(Core::typestr);
+
+        return;
+    }
+
+
+
+    inline Option<Arg<>, bool>::Option (const std::string& abrn_, const std::string& fomn_, Attribute atr_, std::tuple<bool>& tp_) noexcept
+        : Core {abrn_, fomn_, atr_}
+        , args { }
+        , ope  (tp_)
+    {
+        args.stream_type_str(Core::typestr);
+
+        return;
+    }
+        
+
+
+    //_ Varialbe Function
+    inline auto Option<Arg<>, bool>::set_value (size_t num_, const char* str_) noexcept
+        -> int
+    {
+        return args.set_value(num_, str_);
+    }
+
+
+    inline auto Option<Arg<>, bool>::nof_args (void) noexcept
         -> size_t
     {
-        return Arg::nof_args();
+        return Arg<>::nof_args();
+    }
+    
+
+    inline auto Option<Arg<>, bool>::operate (void) noexcept
+        -> int
+    {
+        return ope.operate(args);
+    }
+
+
+    inline auto Option<Arg<>, bool>::function (void) noexcept
+        -> int
+    {
+        return args.function();
+    }
+
+
+    inline auto Option<Arg<>, bool>::set_function (const typename Arg<>::FuncType1& f_) noexcept
+        -> void
+    {
+        args.set_function(f_);
+
+        return;
+    }
+
+
+    inline auto Option<Arg<>, bool>::set_function (const typename Arg<>::FuncType2& f_) noexcept
+        -> void
+    {
+        args.set_function(f_);
+
+        return;
+    }
+           
+    
+    inline auto Option<Arg<>, bool>::set_operate (const typename Ope<Arg<>, bool>::FuncType1& f_) noexcept
+        -> void
+    {
+        ope.set_operate(f_);
+
+        return;
     }
  
 
-    template <class Arg, class Ope>
-    inline auto Option<Arg, Ope>::set_value (size_t num_, const char* str_) noexcept
-        -> int
+    inline auto Option<Arg<>, bool>::set_operate (const typename Ope<Arg<>, bool>::FuncType2& f_) noexcept
+        -> void
     {
-        return Arg::set_value(num_, str_);
+        ope.set_operate(f_);
+
+        return;
     }
 
 
-    template <class Arg, class Ope>
-    inline auto Option<Arg, Ope>::_operate (void) noexcept
-        -> int
+
+    //(    comlar::Option<Arg<As...>, Bs...> Structure    )//
+    //_ Constructor
+    template <typename... As, typename... Bs>
+    inline Option<Arg<As...>, Bs...>::Option (const std::string& abrn_, const std::string& fomn_, Attribute atr_, Bs&... bs_) noexcept
+        : Core {abrn_, fomn_, atr_}
+        , args { }
+        , ope  {bs_...}
     {
-        return Arg::_operate1(*this);
+
+
+        args.stream_type_str(Core::typestr);
+
+        return;
     }
 
 
-    template <class Arg, class Ope>
-    inline auto Option<Arg, Ope>::_check (void) noexcept
+    template <typename... As, typename... Bs>
+    inline Option<Arg<As...>, Bs...>::Option (const std::string& abrn_, const std::string& fomn_, Attribute atr_, std::tuple<Bs...>& tp_) noexcept
+        : Core {abrn_, fomn_, atr_}
+        , args { }
+        , ope  (tp_)
+    {
+        args.stream_type_str(Core::typestr);
+
+        return;
+    }
+
+
+
+    //_ Varialbe Function
+    template <typename... As, typename... Bs>
+    inline auto Option<Arg<As...>, Bs...>::set_value (size_t num_, const char* str_) noexcept
         -> int
     {
-        return Arg::_check1(*this);
+        return args.set_value(num_, str_);
+    }
+
+
+    template <typename... As, typename... Bs>
+    inline auto Option<Arg<As...>, Bs...>::nof_args (void) noexcept
+        -> size_t
+    {
+        return Arg<As...>::nof_args();
+    }
+    
+    
+
+    template <typename... As, typename... Bs>
+    inline auto Option<Arg<As...>, Bs...>::operate (void) noexcept
+        -> int
+    {
+        return ope.operate(args);
+    }
+
+
+    template <typename... As, typename... Bs>
+    inline auto Option<Arg<As...>, Bs...>::function (void) noexcept
+        -> int
+    {
+        return args.function();
+    }
+
+
+    template <typename... As, typename... Bs>
+    inline auto Option<Arg<As...>, Bs...>::set_function (const typename Arg<As...>::FuncType1& f_) noexcept
+        -> void
+    {
+        args.set_function(f_);
+
+        return;
+    }
+
+
+    template <typename... As, typename... Bs>
+    inline auto Option<Arg<As...>, Bs...>::set_function (const typename Arg<As...>::FuncType2& f_) noexcept
+        -> void
+    {
+        args.set_function(f_);
+
+        return;
+    }
+           
+    
+    template <typename... As, typename... Bs>
+    inline auto Option<Arg<As...>, Bs...>::set_operate (const typename Ope<Arg<As...>, Bs...>::FuncType1& f_) noexcept
+        -> void
+    {
+        ope.set_operate(f_);
+
+        return;
+    }
+ 
+
+    template <typename... As, typename... Bs>
+    inline auto Option<Arg<As...>, Bs...>::set_operate (const typename Ope<Arg<As...>, Bs...>::FuncType2& f_) noexcept
+        -> void
+    {
+        ope.set_operate(f_);
+
+        return;
     }
 }
+#endif
