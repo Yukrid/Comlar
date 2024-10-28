@@ -68,7 +68,7 @@ namespace comlar{
     {
         switch(func_id){
             case 1:{
-                std::tuple<const As&..., Bs&...> all=std::tuple_cat(args_.tuple, tuple);
+                std::tuple<const As..., Bs&...> all=std::tuple_cat(args_.tuple, tuple);
                 return std::apply(func1, all);
             }
             case 2:{
@@ -140,7 +140,7 @@ namespace comlar{
         switch(func_id){
             case 1:{
                 std::tuple<const std::array<A, S>&> a(args_.array);
-                std::tuple<const std::array<A, S>&, Bs&...> all=std::tuple_cat(a, tuple);
+                std::tuple<const std::array<A, S>, Bs&...> all=std::tuple_cat(a, tuple);
                 return std::apply(func1, all);
             }
             case 2:{
@@ -212,7 +212,7 @@ namespace comlar{
         switch(func_id){
             case 1:{
                 std::tuple<const std::vector<A>&> a(args_.vector);
-                std::tuple<const std::vector<A>&, Bs&...> all=std::tuple_cat(a, tuple);
+                std::tuple<const std::vector<A>, Bs&...> all=std::tuple_cat(a, tuple);
                 return std::apply(func1, all);
             }
             case 2:{
