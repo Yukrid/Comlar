@@ -40,7 +40,7 @@ COMLARのコマンドライン処理を実装するには以下の流れで行�
 
 ### 1. 実行器クラスのインスタンス化
 
-COMLARを利用するには，まずヘッダーをインクルードし，実行器(Executor)クラスのインスタンス化する必要があります．
+COMLARを利用するには，まずヘッダーをインクルードし，実行器(Executor)クラスのインスタンス化をする必要があります．
 
 ```cpp
 #include <comlar.hpp>
@@ -557,7 +557,3 @@ int main(int argc, char** argv){
   [comlar::Executor::execute] Error detected in checking -s --scalar (-6).
   result: -6
   ```
-
-
-
-
