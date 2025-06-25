@@ -4,8 +4,13 @@ project(comlar CXX)
 
 add_library(comlar INTERFACE)
 target_compile_features(comlar INTERFACE cxx_std_17)
-target_include_directories(comlar INTERFACE include)
+
+target_include_directories(comlar INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>)
+
 install(DIRECTORY include/ DESTINATION include)
+
 
 add_executable(basic1 example/basic1.cpp)
 target_compile_features(basic1 PRIVATE cxx_std_17)
