@@ -64,6 +64,12 @@ namespace comlar{
     template <>                        inline auto str_conv<char>               (const char*) noexcept -> char;
     template <>                        inline auto str_conv<std::string>        (const char*) noexcept -> std::string;
     template <>                        inline auto str_conv<const char*>        (const char*) noexcept -> const char*;
+
+    inline auto is_terminate (const char*) noexcept -> bool;
+    inline auto is_real_num (const char*) noexcept -> bool;
+    inline auto is_bool     (const char*) noexcept -> bool;
+    inline auto is_real_num (const char*) noexcept -> bool;
+
 }
 
 #include "forward.inl"

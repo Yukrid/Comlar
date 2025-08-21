@@ -68,8 +68,17 @@ namespace comlar{
     {
         switch(func_id){
             case 1:{
-                std::tuple<const As..., Bs&...> all=std::tuple_cat(args_.tuple, tuple);
-                return std::apply(func1, all);
+                return std::apply(
+                    [&](const As&... in_vals) -> int {
+                        return std::apply(
+                            [&](Bs&... out_refs) -> int {
+                                return func1(in_vals..., out_refs...);
+                            },
+                            this->tuple
+                        );
+                    },
+                    args_.tuple
+                );
             }
             case 2:{
                 return func2(args_.tuple, tuple);
