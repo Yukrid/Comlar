@@ -2,6 +2,7 @@
 #define COMLAR_FORWARD_HPP
 
 #include <iostream>
+#include <cstdint>
 
 //+++++++++++++++++//
 //    Namespace    //
